@@ -1,0 +1,62 @@
+<ScrollView android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="#000000">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.sank.popularmovies1.MovieDetailFragment">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="225dp"
+        android:src="@drawable/ic_image_alt"
+        android:scaleType="centerInside"
+        android:id="@+id/imageview_backdrop"
+        android:adjustViewBounds="false"
+        android:layout_alignParentTop="true"
+        android:cropToPadding="false" />
+
+    <TextView
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textview_release_date"
+        android:layout_below="@+id/imageview_backdrop"
+        android:hint="Release Date: 01/01/2016"
+        android:textSize="18sp"
+        android:layout_alignParentRight="true"
+        android:textColor="#a6a5a5"
+        android:textColorHint="#a6a5a5"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textview_rating"
+        android:layout_alignBottom="@+id/imageview_backdrop"
+        android:layout_alignParentRight="true"
+        android:hint="Rating: 5/5"
+        android:textSize="22sp"
+        android:padding="8dp"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        android:background="@drawable/rating_background"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textview_synopsis"
+        android:hint="blah blah blah blah blah bleh bluh blo blah blah blah blah blah bleh bluh blo blah blah blah blah blah bleh bluh blo blah blah blah blah blah bleh bluh blo"
+        android:textSize="24sp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_below="@+id/textview_release_date"
+        android:textColor="#a6a5a5"
+        android:textColorHint="#a6a5a5"
+        android:layout_marginBottom="16dp"/>
+
+</RelativeLayout>
+</ScrollView>
