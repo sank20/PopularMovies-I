@@ -24,11 +24,9 @@ public class ImageAdapter extends BaseAdapter {
 
     private final String LOG_TAG= getClass().getSimpleName();
     private Context mContext;
-    //ArrayList<String> movieNames;
     ArrayList<String> imageURLlist;
     public ImageAdapter(Context context,ArrayList<String> imageURLlist){
         mContext = context;
- //       this.movieNames = movieNames;
         this.imageURLlist = imageURLlist;
     }
 
@@ -55,16 +53,7 @@ public class ImageAdapter extends BaseAdapter {
             movieImageView.setLayoutParams(new GridView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
             movieImageView.setAdjustViewBounds(true);
             movieImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            /*movieImageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    FragmentTransaction ft = ((ActionBarActivity)mContext).getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.main_container,new MovieDetailFragment(),"details_fragment");
-                    ft.commit();
-                    ((ActionBarActivity) mContext).setTitle(movieNames.get(position));
 
-                }
-            });*/
         }else{
             movieImageView = (ImageView) convertView;
         }

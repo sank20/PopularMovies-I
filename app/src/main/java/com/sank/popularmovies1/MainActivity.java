@@ -41,8 +41,8 @@ import java.util.zip.Inflater;
 public class MainActivity extends ActionBarActivity {
 
     ArrayList<String> movieTitleList;
-    final String popular = "popular";
-    final String top_rated="top_rated";
+    String popular ;
+    String top_rated;
     public GridView movieGrid;
     String sortBy;
     SharedPreferences sharedPreferences;
@@ -52,8 +52,8 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-     //   sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        popular = getString(R.string.pref_value_popular);
+        top_rated=getString(R.string.pref_value_top_rated);
         sortBy= "initializationtext";//sharedPreferences.getString("movies_sorting_preference",popular);
         movieGrid = (GridView) findViewById(R.id.movies_gridview);
         movieGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -96,17 +96,14 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-        // Save the user's current game state
         // save index and top position
         int index = movieGrid.getFirstVisiblePosition();
         View v = movieGrid.getChildAt(0);
         int top = (v == null) ? 0 : (v.getTop() - movieGrid.getPaddingTop());
 
-// ...
         savedInstanceState.putInt("gridIndex", index);
         savedInstanceState.putInt("gridTop", top);
 
-        // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);
     }
 
@@ -115,15 +112,15 @@ public class MainActivity extends ActionBarActivity {
         // Always call the superclass so it can restore the view hierarchy
         super.onRestoreInstanceState(savedInstanceState);
         movieGrid.setSelectionFromTop(savedInstanceState.getInt("gridIndex"), savedInstanceState.getInt("gridTop"));
-        // Restore state members from saved instance
+
     }
     @Override
     public void onStart() {
         super.onStart();
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        if(!sortBy.equals(sharedPreferences.getString("movies_sorting_preference",popular))) {
-            new GetMovieData(getApplicationContext()).execute(sharedPreferences.getString("movies_sorting_preference", popular));
-            sortBy= sharedPreferences.getString("movies_sorting_preference",popular);
+        if(!sortBy.equals(sharedPreferences.getString(getString(R.string.sharedpref_sortby_key),popular))) {
+            new GetMovieData(getApplicationContext()).execute(sharedPreferences.getString(getString(R.string.sharedpref_sortby_key), popular));
+            sortBy= sharedPreferences.getString(getString(R.string.sharedpref_sortby_key),popular);
         }
 
     }
@@ -138,16 +135,7 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-           /* case R.id.menu_sort_by_most_popular:
-                new GetMovieData(getApplicationContext()).execute(popular);
-                setTitle("Most Popular movies");
-                return  true;
 
-            case R.id.menu_sort_by_top_rated:
-                new GetMovieData(getApplicationContext()).execute(top_rated);
-                setTitle("Top rated Movies");
-                return true;
-*/
             case R.id.menu_settings:
                 Intent openSettings = new Intent(MainActivity.this,SettingsActivity.class);
                 startActivity(openSettings);
@@ -163,14 +151,11 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public void onBackPressed() {
 
-//        if(getSupportFragmentManager().findFragmentById(R.id.main_container) instanceof MovieDetailFragment){
-//            getSupportFragmentManager().beginTransaction().replace(R.id.main_container,new MainMoviesFragment()).commit();
-//        }else {
+
          super.onBackPressed();
             Intent intent = new Intent(Intent.ACTION_MAIN);
             intent.addCategory(Intent.CATEGORY_HOME);
             startActivity(intent);
-        //}
     }
 
 
@@ -193,7 +178,7 @@ public class MainActivity extends ActionBarActivity {
 
         @Override
         protected String doInBackground(String... movieList) {
-            final String baseURL = "http://api.themoviedb.org/3/movie/";
+            final String baseURL = getString(R.string.api_base_url);
 
 
 
@@ -202,7 +187,7 @@ public class MainActivity extends ActionBarActivity {
             String popularJson = null;
             Uri builtPopularDataUri = Uri.parse(baseURL).buildUpon()
                     .appendPath(movieList[0])
-                    .appendQueryParameter("api_key",BuildConfig.THE_MOVIEDB_API_KEY).build();
+                    .appendQueryParameter(getString(R.string.apikey_query_param),BuildConfig.THE_MOVIEDB_API_KEY).build();
             try {
                 URL popularDataURL = new URL(builtPopularDataUri.toString());
                 Log.v(LOG_TAG,"popular uri:"+popularDataURL.toString());
@@ -258,7 +243,7 @@ public class MainActivity extends ActionBarActivity {
         protected void onPostExecute(String popularJson) {
             super.onPostExecute(popularJson);
             if (popularJson == null) {
-                Toast.makeText(context, "Something went wrong, please check your internet connection", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, R.string.error_toast_message, Toast.LENGTH_LONG).show();
             } else {
                 imageURLsList = new ArrayList<>();
                 movieTitleList = new ArrayList<>();
@@ -282,10 +267,10 @@ public class MainActivity extends ActionBarActivity {
                         Log.i(LOG_TAG, "poster:" + poster);
                     }
                     sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-                    if (sharedPreferences.getString("movies_sorting_preference",popular).equals("popular"))
-                        setTitle("Most Popular Movies");
-                    else if(sharedPreferences.getString("movies_sorting_preference",popular).equals("top_rated"))
-                        setTitle("Top Rated Movies");
+                    if (sharedPreferences.getString(getString(R.string.sharedpref_sortby_key),popular).equals(getString(R.string.pref_value_popular)))
+                        setTitle(getString(R.string.most_popular_activity_title));
+                    else if(sharedPreferences.getString(getString(R.string.sharedpref_sortby_key),popular).equals(getString(R.string.pref_value_top_rated)))
+                        setTitle(getString(R.string.top_rated_activity_title));
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -297,8 +282,8 @@ public class MainActivity extends ActionBarActivity {
         }
 
         public String getImageUrl(String size, String tag){
-            final String imageBaseURL = "http://image.tmdb.org/t/p/";
-            final String image_size = "w185"; //you will need a ‘size’, which will be one of the following:
+            final String imageBaseURL = getString(R.string.image_base_url);
+            //final String image_size = "w185"; //you will need a ‘size’, which will be one of the following:
             // "w92", "w154", "w185", "w342", "w500", "w780", or "original". For most phones we recommend using “w185”.
             final String image_tag;
             Uri builtUri = Uri.parse(imageBaseURL).buildUpon()
