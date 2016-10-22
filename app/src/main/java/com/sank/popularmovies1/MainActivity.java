@@ -1,10 +1,12 @@
 package com.sank.popularmovies1;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
@@ -42,6 +44,7 @@ public class MainActivity extends ActionBarActivity {
     final String popular = "popular";
     final String top_rated="top_rated";
     public GridView movieGrid;
+    String sortBy;
     SharedPreferences sharedPreferences;
     ArrayList<String> backdropUriList, movieRatingList, releaseDateList, overviewList;
     private final String LOG_TAG= getClass().getSimpleName();
@@ -50,6 +53,8 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+     //   sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        sortBy= "initializationtext";//sharedPreferences.getString("movies_sorting_preference",popular);
         movieGrid = (GridView) findViewById(R.id.movies_gridview);
         movieGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -88,11 +93,38 @@ public class MainActivity extends ActionBarActivity {
         );*/
 
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save the user's current game state
+        // save index and top position
+        int index = movieGrid.getFirstVisiblePosition();
+        View v = movieGrid.getChildAt(0);
+        int top = (v == null) ? 0 : (v.getTop() - movieGrid.getPaddingTop());
+
+// ...
+        savedInstanceState.putInt("gridIndex", index);
+        savedInstanceState.putInt("gridTop", top);
+
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        // Always call the superclass so it can restore the view hierarchy
+        super.onRestoreInstanceState(savedInstanceState);
+        movieGrid.setSelectionFromTop(savedInstanceState.getInt("gridIndex"), savedInstanceState.getInt("gridTop"));
+        // Restore state members from saved instance
+    }
     @Override
     public void onStart() {
         super.onStart();
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        new GetMovieData(getApplicationContext()).execute(sharedPreferences.getString("movies_sorting_preference",popular));
+        if(!sortBy.equals(sharedPreferences.getString("movies_sorting_preference",popular))) {
+            new GetMovieData(getApplicationContext()).execute(sharedPreferences.getString("movies_sorting_preference", popular));
+            sortBy= sharedPreferences.getString("movies_sorting_preference",popular);
+        }
 
     }
 
