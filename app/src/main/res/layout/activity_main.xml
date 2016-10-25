@@ -1,19 +1,11 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<GridView android:id="@+id/movies_gridview"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.sank.popularmovies1.MainMoviesFragment">
+    android:verticalSpacing="0dp"
+    android:horizontalSpacing="0dp"
+    android:stretchMode="columnWidth"
+    android:columnWidth="@dimen/gridview_colWidth"
+    android:numColumns="auto_fit"
+    android:gravity="center"
+    xmlns:android="http://schemas.android.com/apk/res/android" />
 
-    <GridView
-        android:id="@+id/movies_gridview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:verticalSpacing="0dp"
-        android:horizontalSpacing="0dp"
-        android:stretchMode="columnWidth"
-        android:columnWidth="180dp"
-        android:numColumns="auto_fit"
-        android:gravity="center"
-        />
-
-</RelativeLayout>

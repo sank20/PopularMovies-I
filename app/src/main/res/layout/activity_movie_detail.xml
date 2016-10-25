@@ -2,34 +2,33 @@
     android:layout_width="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="#000000">
+    android:background="@color/colorDetailBackgound">
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     tools:context="com.sank.popularmovies1.MovieDetailFragment">
 
     <ImageView
+        android:scaleType="centerCrop"
         android:layout_width="match_parent"
-        android:layout_height="225dp"
-        android:src="@drawable/ic_image_alt"
-        android:scaleType="centerInside"
+        android:layout_height="wrap_content"
         android:id="@+id/imageview_backdrop"
-        android:adjustViewBounds="false"
+        android:adjustViewBounds="true"
         android:layout_alignParentTop="true"
         android:cropToPadding="false" />
 
     <TextView
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_vertical_margin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textview_release_date"
         android:layout_below="@+id/imageview_backdrop"
-        android:hint="Release Date: 01/01/2016"
-        android:textSize="18sp"
+        tools:text="Release Date: 01/01/2016"
+        android:textSize="@dimen/release_date_textsize"
         android:layout_alignParentRight="true"
-        android:textColor="#a6a5a5"
-        android:textColorHint="#a6a5a5"/>
+        android:textColor="@color/colorReleaseDateText"
+        android:textColorHint="@color/colorReleaseDateText"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -37,11 +36,10 @@
         android:id="@+id/textview_rating"
         android:layout_alignBottom="@+id/imageview_backdrop"
         android:layout_alignParentRight="true"
-        android:hint="Rating: 5/5"
-        android:textSize="22sp"
+        tools:text="Rating: 5/5"
+        android:textSize="@dimen/rating_textsize"
         android:padding="8dp"
-        android:textColor="#FFFFFF"
-        android:textColorHint="#FFFFFF"
+        android:textColor="@color/colorRatingText"
         android:background="@drawable/rating_background"
         />
 
@@ -49,14 +47,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textview_synopsis"
-        android:hint="blah blah blah blah blah bleh bluh blo blah blah blah blah blah bleh bluh blo blah blah blah blah blah bleh bluh blo blah blah blah blah blah bleh bluh blo"
-        android:textSize="24sp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
+        tools:text="blah blah blah blah blah bleh bluh blo blah blah blah blah blah bleh bluh blo blah blah blah blah blah bleh bluh blo blah blah blah blah blah bleh bluh blo"
+        android:textSize="@dimen/movie_overview_textsize"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_below="@+id/textview_release_date"
-        android:textColor="#a6a5a5"
-        android:textColorHint="#a6a5a5"
-        android:layout_marginBottom="16dp"/>
+        android:textColor="@color/colorOverviewText"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"/>
 
 </RelativeLayout>
 </ScrollView>

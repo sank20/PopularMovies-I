@@ -3,4 +3,8 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="colorDetailBackgound">#000000</color>
+    <color name="colorReleaseDateText">#a6a5a5</color>
+    <color name="colorRatingText">#FFFFFF</color>
+    <color name="colorOverviewText">#a6a5a5</color>
 </resources>

@@ -1,5 +1,6 @@
 package com.sank.popularmovies1;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageView;
@@ -25,27 +26,29 @@ public class MovieDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
+        Intent in = getIntent();
+        MovieClass movieObj = (MovieClass) in.getParcelableExtra("movie_details");
         TVReleaseDate = (TextView) findViewById(R.id.textview_release_date);
         TVSynopsis = (TextView) findViewById(R.id.textview_synopsis);
         TVRating = (TextView) findViewById(R.id.textview_rating);
-        Bundle movieDetails = getIntent().getExtras();
+        //Bundle movieDetails = getIntent().getExtras();
         DateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd");
         dateFormat.setLenient(false);
         DateFormat toFormat = new SimpleDateFormat("dd MMM yyyy");
         toFormat.setLenient(false);
         Date relDate=new Date();
         try {
-             relDate = dateFormat.parse(movieDetails.getString("release_date"));
+             relDate = dateFormat.parse(movieObj.getReleaseDate());
 
         } catch (ParseException e) {
             e.printStackTrace();
         }
         TVReleaseDate.setText("Release Date: "+toFormat.format(relDate));
-        TVRating.setText("Rating: "+movieDetails.getString("rating"));
-        TVSynopsis.setText(movieDetails.getString("overview"));
+        TVRating.setText("Rating: "+movieObj.getRating());
+        TVSynopsis.setText(movieObj.getOverview());
         imageviewBackdrop = (ImageView) findViewById(R.id.imageview_backdrop);
-        setTitle(getIntent().getStringExtra("movie_name"));
-        Picasso.with(getApplicationContext()).load(URLDecoder.decode(getIntent().getStringExtra("backdrop"))).
+        setTitle(movieObj.getMovieName());
+        Picasso.with(getApplicationContext()).load(URLDecoder.decode(movieObj.getPosterurl())).
                 placeholder(R.drawable.ic_crop_original_black_24dp).fit()
                 .error(R.drawable.ic_cross_black_24dp)
                 .into(imageviewBackdrop);

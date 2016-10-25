@@ -39,8 +39,8 @@ import java.util.prefs.PreferenceChangeEvent;
 import java.util.zip.Inflater;
 
 public class MainActivity extends ActionBarActivity {
-
-    ArrayList<String> movieTitleList;
+    ArrayList<MovieClass> moviesList;
+    ArrayList<String> imageURLsList;
     String popular ;
     String top_rated;
     public GridView movieGrid;
@@ -60,15 +60,8 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent openDetail = new Intent(MainActivity.this,MovieDetailActivity.class);
-                Bundle movieDetails = new Bundle();
-                movieDetails.putString("movie_name",movieTitleList.get(position));
-                movieDetails.putString("backdrop",backdropUriList.get(position));
-                movieDetails.putString("overview",overviewList.get(position));
-                movieDetails.putString("release_date",releaseDateList.get(position));
-                movieDetails.putString("rating",movieRatingList.get(position));
-                openDetail.putExtras(movieDetails);
+                openDetail.putExtra("movie_details",moviesList.get(position));
                 startActivity(openDetail);
-                //setTitle(movieTitleList.get(position));
 
             }
         });
@@ -136,10 +129,20 @@ public class MainActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
 
-            case R.id.menu_settings:
+            case R.id.menu_sort_by_most_popular:
+                new GetMovieData(getApplicationContext()).execute(popular);
+                setTitle("Most Popular movies");
+                return  true;
+
+            case R.id.menu_sort_by_top_rated:
+                new GetMovieData(getApplicationContext()).execute(top_rated);
+                setTitle("Top rated Movies");
+                return true;
+
+         /*   case R.id.menu_settings:
                 Intent openSettings = new Intent(MainActivity.this,SettingsActivity.class);
                 startActivity(openSettings);
-                return true;
+                return true;*/
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -148,21 +151,11 @@ public class MainActivity extends ActionBarActivity {
     }
 
 
-    @Override
-    public void onBackPressed() {
-
-
-         super.onBackPressed();
-            Intent intent = new Intent(Intent.ACTION_MAIN);
-            intent.addCategory(Intent.CATEGORY_HOME);
-            startActivity(intent);
-    }
-
 
 
     class GetMovieData extends AsyncTask<String,Void,String> {
 
-        ArrayList<String> imageURLsList;
+
 
         Context context;
 
@@ -245,25 +238,28 @@ public class MainActivity extends ActionBarActivity {
             if (popularJson == null) {
                 Toast.makeText(context, R.string.error_toast_message, Toast.LENGTH_LONG).show();
             } else {
+                moviesList = new ArrayList<>();
                 imageURLsList = new ArrayList<>();
-                movieTitleList = new ArrayList<>();
-                backdropUriList = new ArrayList<>();
-                movieRatingList = new ArrayList<>();
-                releaseDateList = new ArrayList<>();
-                overviewList = new ArrayList<>();
                 try {
                     JSONArray popularMoviesArrays = new JSONObject(popularJson).getJSONArray("results");
                     for (int i = 0; i < popularMoviesArrays.length(); i++) {
                         JSONObject obj1 = popularMoviesArrays.getJSONObject(i);
                         String poster = obj1.getString("poster_path");
-                        String backdrop = obj1.getString("backdrop_path");
+                        //String backdrop = obj1.getString("backdrop_path");
                         poster = poster.substring(1);
-                        overviewList.add(obj1.getString("overview"));
-                        movieRatingList.add(obj1.getString("vote_average"));
-                        releaseDateList.add(obj1.getString("release_date"));
-                        backdropUriList.add(getImageUrl("w342", backdrop));
-                        movieTitleList.add(obj1.getString("original_title"));
+                        MovieClass movieObj = new MovieClass();
+                        movieObj.setMovieName(obj1.getString("original_title"));
+                        movieObj.setOverview(obj1.getString("overview"));
+                        movieObj.setPosterurl(getImageUrl("w185", poster));
+                        movieObj.setRating(obj1.getString("vote_average"));
+                        movieObj.setReleaseDate(obj1.getString("release_date"));
+                        //overviewList.add(obj1.getString("overview"));
+                        //movieRatingList.add(obj1.getString("vote_average"));
+                       // releaseDateList.add(obj1.getString("release_date"));
+                        //backdropUriList.add(getImageUrl("w500", backdrop));
+                        //movieTitleList.add(obj1.getString("original_title"));
                         imageURLsList.add(getImageUrl("w185", poster));
+                        moviesList.add(movieObj);
                         Log.i(LOG_TAG, "poster:" + poster);
                     }
                     sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
